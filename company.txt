@@ -1,0 +1,364 @@
+create database Company
+
+create table employee (
+Fname varchar(20),
+Lname varchar(20),
+SSN  int primary key,
+BDate datetime ,
+Address varchar(40),
+Sex char,
+Salary int,
+Superssn int,
+Dno int)
+
+create table Department (
+Dname varchar(20),
+Dnum int primary key,
+MGRssn int foreign key REFERENCES employee(SSN) ,
+MGRStartDate datetime ) 
+
+alter table employee    
+add constraint fk_Dnum  foreign key (Dno) REFERENCES Department(Dnum)
+
+create table works_for(
+ESSN int foreign key REFERENCES Employee(ssn),
+Pno int ,
+hours int 
+)
+
+
+
+create table Project(
+Pname varchar(20),
+Pnumber int primary key,
+Plocation varchar(20),
+city varchar(20),
+Dnum int foreign key REFERENCES department(Dnum),
+)
+
+alter table works_for    
+add constraint p_no  foreign key (pno) REFERENCES project(pnumber)
+
+create table Dependent(
+Essn int foreign key REFERENCES Employee(ssn),
+Depandenent_name varchar(20),
+sex char,
+Bdate datetime)
+
+
+insert into Employee(Fname,Lname,SSN,BDate,Address,Sex,Salary,Superssn)values
+--('Ahmed','Ali',112233,'10-01-1965','15 Ali fahmy St.Giza','M',1300,223344),
+--('Kamel','mohamed',223344,'10-15-1970','38 mohy el dien abo el ezz St.cairo','M',1800,321654),
+--('Hanaa','sobhy',123456,'03-18-1973','38abdelkhaliktharwatSt.Downtown.cairo','F',800,223344),
+('Amr','omran',321654,'09-14-1963','44 Hilopolis.Cairo','M',2500,null),
+('noha','mohamed',968574,'02-01-1975','55 orabi st.El Mohandiseen St.Cairo','f',1600,321654),
+('Edward','hanna',512463,'08-19-1972','18 Abaas El 3akaad St.Nasr City.Cairo','m',1500,321654),
+('Mariam','Adel',669955,'06-12-1982','269 El-Haram St.Giza','f',750,512463),
+('Maged','Raoof',521634,'04-06-1980','18 Kholosi St.Shobra.Cairo','m',1000,968574)
+
+select * from employee
+
+insert into Department(Dname,DNum,MGRssn,MGRStartDate)
+values('Dp1',10,223344,'1/1/2005'),
+('Dp2',20,968574,'1/3/2006'),
+('Dp3',30,512463,'1/6/2006')
+
+
+
+INSERT INTO Project (Pname,Pnumber, Plocation, City, Dnum)VALUES
+('AL Solimaniah',100,'Cairo_Alex Road','Alex',10),
+('Al Rabwah',200,'6th of October City','Giza',10),
+('Al Rawdah',300,'Zaied City','Giza',10),
+('Al Rowad',400,'Cairo_Faiyom Road','Giza',20),
+('Al Rehab',500,'Nasr City','Cairo',30),
+('Pitcho american',600,'Maady','Cairo',30),
+('Ebad El Rahman',700,'Ring Road','Cairo',20);
+
+INSERT INTO Works_For (ESSN, Pno, Hours)
+VALUES (223344,100,10), 
+(223344,200,10), 
+(223344,300,10), 
+(968574,400,15), 
+(968574,700,15), 
+(968574,300,10), 
+(669955,400,20), 
+(223344,500,10), 
+(669955,700,7), 
+(669955,300,10), 
+(512463,500,10), 
+(512463,600,25), 
+(521634,500,10), 
+(521634,600,20), 
+(521634,300,6), 
+(521634,400,4);
+
+
+insert into Dependent(Essn,Depandenent_name,Sex,Bdate)
+VALUES (1612233, 'Hala Saied Ali', 'F', '1-10-1970'), 
+(223344, 'Ahmed Kamel Shawki', 'M', '2-03-1998'), 
+(223344, 'Mona Adel Mohamed', 'F', '5-04-1975'), 
+(321654, 'Ramy Amr Omran', 'M', '2-01-1990'), 
+(321654, 'Omar Amr Omran', 'M', '3-03-1993'), 
+(321654, 'Sanaa Gawish', 'F', '1-05-1973'), 
+(512463, 'Sara Edward', 'F', '1-09-2001')
+
+--Insert your personal data to the employee table as a new employee in department
+--number 30, SSN = 102672, Superssn = 112233.
+
+insert into Employee(Dno,SSN,Superssn)values
+(30,102672,112233)
+/*
+insert into Employee(Fname,Lname,SSN,BDate,Address,Sex,Salary,Superssn,Dno)values
+('fawzia','wageeh',102672,'08-01-2000','15 tanta','f',1300,112233,30)
+*/
+--Insert another employee with your friend personal data as new employee in
+--department number 30, SSN = 102660, but don’t enter any value for salary or
+--supervisor number to him but fill all other fields with dummy data.
+
+insert into employee(Fname,Lname,SSN,BDate,Address,Sex,Dno)values
+('fawzia','faraag',102660,'08-01-2000','sfxrdhdhgjureg','f',30)
+
+--In the department table insert new department called "DEPT IT", with id 100,
+--employee with SSN = 112233 as a manager for this department. The start date for this
+--manager is '1-11-2006'
+
+insert into Department(Dname,DNum,MGRssn,MGRStartDate)
+values('Dept it',100,112233,'11/01/2006')
+
+/*
+Do what is required if you know that: Mrs.Noha Mohamed(SSN=968574) moved to
+be the manager of the new department (id = 100), and they give you (use your SSN
+from question1) her position (Dept. 20 manager)
+a. First try to update her record in the department table
+b. Update your record to be department 20 manager.
+c. Update your friend data (entered in question2) to be in your teamwork
+(supervised by you)
+
+*/
+--a
+UPDATE Department
+SET MGRssn = 968574
+WHERE Dnum=100;
+--b
+UPDATE Department
+SET MGRssn = 102672
+WHERE Dnum=20;
+
+UPDATE employee
+SET Dno=20 
+WHERE SSN = 102672;
+--c
+UPDATE employee
+SET Superssn = 102672
+WHERE SSN=102660;
+
+UPDATE employee
+SET Dno=20 
+WHERE SSN=102660;
+
+/*Unfortunately, the company ended the contract with Mr. Kamel Mohamed
+(SSN=223344) so try to delete his data from your database in case you know that
+your friend (SSN entered in question2) will be temporarily in his position.
+Hint: (Check if Mr. Kamel has dependents, works as a department manager,
+supervises any employees or works in any projects and handle these cases).
+*/
+
+delete from Dependent
+where Essn=223344;
+
+UPDATE Department
+SET MGRssn = 102660
+WHERE MGRssn = 223344;
+
+delete from employee
+where SSN=223344;
+
+
+
+--And your salary has been upgraded by 20 percent of its last value.
+
+UPDATE employee
+SET salary +=(Salary*20)/100
+WHERE SSN = 102672;
+
+--1.Display all the employees Data.
+select * from employee
+
+--2.Display the employee First name, last name, Salary and Department number
+select Fname,Lname,Salary,Dno  from employee 
+
+
+--3. Display all the projects names, locations and the department which is responsible about it.
+select pname ,plocation,Dname from Project,Department
+where project.Dnum =Department.Dnum
+
+
+/*4. If you know that the company policy is to pay an annual commission for each
+employee with specific percent equals 10% of his/her annual salary. Display each
+employee full name (Full name as one column) and his annual commission as
+ANNUAL COMM column (alias).*/
+select Fname , Lname as fullname ,(12*salary+.1*salary) as annual_salary  from  employee
+
+
+--5. Display the employees Id, name who earns more than 1000 LE monthly.
+select ssn fname from employee where salary>1000
+
+
+--6. Display the employees Id, name who earns more than 10000 LE annually.
+select ssn fname from employee where 12*salary>10000
+
+
+--7. Display the names and salaries of the female employees
+select  fname salary from employee  where sex='f'
+
+
+--8. Display each department id, name which managed by a manager with id equals968574.
+select ssn fname from employee where superssn=968574
+
+
+--9. Display the IDs, names and locations of the pojects which controlled withdepartment 10.
+select pname, pnumber, plocation from project where Dnum=10
+
+
+
+--1.	Display the Department id, name and id and the name of its manager.
+
+--2.	Display the name of the departments and the name of the projects under its control.
+
+
+select d.dname ,j.pname
+from department d, project j
+where  d.dnum=j.dnum
+
+
+
+--3.	Display the full data about all the dependence associated with the name of the employee they depend on him/her.
+
+
+select d.* ,e.Fname
+from employee e,Dependent d
+where d.Essn=e.SSN
+
+
+--4.	Display (Using Union Function)
+  --a.	 The name and the gender of the dependence that's gender is Female and depending on Female Employee.
+  select d.Depandenent_name
+  from Dependent d
+  where  d.Essn=employee.SSN  and d.sex='f'
+  union
+  select Dependent.sex
+  from employee e
+  where Dependent(Essn)=e.SSN  and  e.sex='f'
+  
+
+  --b.	 And the male dependence that depends on Male Employee.
+
+  select d.Depandenent_name,d.sex
+  from Dependent d,employee e
+  where   e.sex='m'and  e.sex='m' and d.Essn=e.SSN 
+  union
+  select d.Depandenent_name,d.sex
+  from Dependent d,employee e
+  where  d.Essn=e.SSN and  e.sex='m'
+
+
+--5.	Display the Id, name and location of the projects in Cairo or Alex city.
+select j.pnumber, j.pname, j.plocation
+from project j
+where j.city = 'cairo'
+
+
+
+--6.	Display the Projects full data of the projects with a name starts with "a" letter.
+select * 
+from Project
+where
+Pname like 'a%'
+
+
+--7.display all the employees in department 30 whose salary from 1000 to 2000 LE monthly
+select e.Fname
+from Department d,employee e
+where d.MGRssn=e.SSN and
+d.Dnum=30 and
+( e.Salary between 1000  and  2000)
+
+--8.	Retrieve the names of all employees in department 10 who works more than or equal10 hours per week on "AL Rabwah" project.
+
+select e.Fname
+from Department d,employee e,works_for w,Project p
+where d.MGRssn=e.SSN and
+e.SSN=w.ESSN and
+p.Pname='AL Rabwah'and
+d.Dnum=10 and
+w.hours>=10
+
+--9.	Find the names of the employees who directly supervised with Kamel Mohamed.
+select e.Fname
+from employee e
+where e.Superssn=223344
+
+
+--10.	For each project, list the project name and the total hours per week (for all employees) spent on that project.
+
+select p.Pname,w.hours
+from Project p, works_for w
+where p.Pnumber=w.Pno
+
+
+--11.	Retrieve the names of all employees and the names of the projects they are working on, sorted by the project name.
+select e.Fname,p.Pname
+from employee e, Project p
+where e.Dno=p.Dnum
+
+--12.	Display the data of the department which has the smallest employee ID over all employees' ID.
+select *
+from Department
+where Department.Dnum= (
+select employee.Dno
+from employee
+where employee.SSN = (
+select MIN(e.SSN)
+from employee e
+)
+)
+
+--13.	For each department, retrieve the department name and the maximum, minimum and average salary of its employees.
+select d.Dname ,min( e.salary ) as min_salary ,max(e.salary) as max_salary ,avg(e.salary) as avg_salary
+from employee e,Department d
+where e.Dno=d.Dnum
+group by d.Dname
+
+
+--14.	List the last name of all managers who have no dependents.
+SELECT E.SSN
+FROM Employee E
+WHERE (E.SSN not in (SELECT D.ESSN FROM Dependent D)) and
+(E.SSN in (SELECT Dept.MGRSSN FROM Department Dept))
+
+--15.	For each department
+-- if its average salary is less than the average salary of all employees
+-- display its number, name and number of its employees.
+select d.Dnum, d.Dname, e.Fname
+from employee e,Department d
+where e.Salary<(
+select e.Dno ,avg(e.Salary)
+from employee e 
+group by e.Dno)
+
+
+--16.	Retrieve a list of employees and the projects they are working on ordered by department 
+--and within each department, ordered alphabetically by last name, first name.
+select e.Fname,e.Lname,p.Pname ,e.Dno,d.Dnum
+from employee e,Project p,Department d,works_for w
+where d.Dnum=e.Dno and w.Essn=e.ssn and p.pnumber=w.pno
+order by d.Dnum,e.lname,e.fname
+
+--17.	For each project located in Cairo City , 
+--find the project number, the controlling department name
+--,the department manager last name ,address and birthdate
+
+select e.Lname,p.Pnumber,e.Address,d.Dname,e.BDate,p.city
+from employee e, Department d,Project p
+where city='cairo' and d.MGRssn=e.ssn and p.Dnum=d.Dnum
+
